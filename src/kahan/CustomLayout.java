@@ -21,7 +21,8 @@ public class CustomLayout extends JFrame implements ActionListener{
 	ImageIcon icon6 = scaleIcon(new ImageIcon("6.png"));
 	ImageIcon icon7 = scaleIcon(new ImageIcon("7.png"));
 	ImageIcon icon8 = scaleIcon(new ImageIcon("8.png"));
-	Image mine = new ImageIcon("mine.png").getImage();
+	ImageIcon flag = scaleIcon(new ImageIcon("flag.png"));
+    Image mine = new ImageIcon("mine.png").getImage();
 
 	private ImageIcon scaleIcon(ImageIcon icon) {
 		if (icon.getImage() != null) {
@@ -141,12 +142,8 @@ public class CustomLayout extends JFrame implements ActionListener{
             int r = Integer.parseInt(parts[0]);
             int c = Integer.parseInt(parts[1]);
  			buttons[r][c].setBackground(new java.awt.Color(192, 192, 192));
- 			//remove this part
- 			Image newImage = mine.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
- 	        ImageIcon newIcon = new ImageIcon(newImage);
- 	        //till here
  			if (check[r][c]==false) {
- 				buttons[r][c].setIcon(newIcon);
+ 				buttons[r][c].setIcon(flag);
  				check[r][c]=true;
  			}
  			else if (check[r][c]==true) {
@@ -176,8 +173,8 @@ public class CustomLayout extends JFrame implements ActionListener{
             }
  			
  			boolean allRevealed = true;
- 			for (int r1 = 0; r1 < 5; r1++) {
- 				for (int c1 = 0; c1 < 5; c1++) {
+ 			for (int r1 = 0; r1 < rowSize; r1++) {
+ 				for (int c1 = 0; c1 < colSize; c1++) {
  					if (matrix[r1][c1] >= 0) {
  						allRevealed = false;
  						break;

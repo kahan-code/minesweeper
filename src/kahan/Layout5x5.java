@@ -20,6 +20,7 @@ public class Layout5x5 extends JFrame implements ActionListener{
 	ImageIcon icon6 = scaleIcon(new ImageIcon("6.png"));
 	ImageIcon icon7 = scaleIcon(new ImageIcon("7.png"));
 	ImageIcon icon8 = scaleIcon(new ImageIcon("8.png"));
+	ImageIcon flag = scaleIcon(new ImageIcon("flag.png"));
 	Image mine = new ImageIcon("mine.png").getImage();
 	
 	private ImageIcon scaleIcon(ImageIcon icon) {
@@ -107,7 +108,7 @@ public class Layout5x5 extends JFrame implements ActionListener{
                 int nr = r + dr;
                 int nc = c + dc;
                 if (nr >= 0 && nr < 5 && nc >= 0 && nc < 5 && matrix[nr][nc] != -1) {
-                	buttons[nr][nc].doClick();
+                	check[nr][nc] = true;
                 	buttons[nr][nc].doClick();
                 }
             }
@@ -120,56 +121,53 @@ public class Layout5x5 extends JFrame implements ActionListener{
             String[] parts = cmd.split(",");
             int r = Integer.parseInt(parts[0]);
             int c = Integer.parseInt(parts[1]);
-			buttons[r][c].setBackground(new java.awt.Color(192, 192, 192));
-			//remove this part
-			Image newImage = mine.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-	        ImageIcon newIcon = new ImageIcon(newImage);
-	        //till here
-			if (check[r][c]==false && matrix[r][c]!=-1) {
-				buttons[r][c].setIcon(newIcon);
-				check[r][c]=true;
-			}
-			else if (check[r][c]==true && matrix[r][c]!=-1) {
+ 			buttons[r][c].setBackground(new java.awt.Color(192, 192, 192));
+ 			if (check[r][c]==false) {
+ 				buttons[r][c].setIcon(flag);
+ 				check[r][c]=true;
+ 			}
+ 			else if (check[r][c]==true) {
 			switch (matrix[r][c]) {
 				case 0: buttons[r][c].setIcon(icon0); 
 						if (matrix[r][c]!=-2) {
-							matrix[r][c] = -2;
-							open(r,c); 
-						}
-						break;
-				case 1: buttons[r][c].setIcon(icon1); break;
-				case 2: buttons[r][c].setIcon(icon2); break;
-				case 3: buttons[r][c].setIcon(icon3); break;
-				case 4: buttons[r][c].setIcon(icon4); break;
-				case 5: buttons[r][c].setIcon(icon5); break;
-				case 6: buttons[r][c].setIcon(icon6); break;
-				case 7: buttons[r][c].setIcon(icon7); break;
-				case 8: buttons[r][c].setIcon(icon8); break;
-			}
-			if (matrix[r][c] == -1) {
-                new youLose();
-                reveal();
-                disable();
-			}
-            
+                            if (matrix[r][c] !=-2) {
+                                matrix[r][c] = -2;
+ 							    open(r,c); 
+ 						}
+                    }
+ 						break;
+ 				case 1: buttons[r][c].setIcon(icon1); matrix[r][c] = -2; break;
+ 				case 2: buttons[r][c].setIcon(icon2); matrix[r][c] = -2; break;
+ 				case 3: buttons[r][c].setIcon(icon3); matrix[r][c] = -2; break;
+ 				case 4: buttons[r][c].setIcon(icon4); matrix[r][c] = -2; break;
+ 				case 5: buttons[r][c].setIcon(icon5); matrix[r][c] = -2; break;
+ 				case 6: buttons[r][c].setIcon(icon6); matrix[r][c] = -2; break;
+ 				case 7: buttons[r][c].setIcon(icon7); matrix[r][c] = -2; break;
+ 				case 8: buttons[r][c].setIcon(icon8); matrix[r][c] = -2; break;
+ 			}
+ 			  if (matrix[r][c] == -1) {
+ 	                new youLose();
+ 	                reveal();
+ 	                disable();
+ 			}
             }
-			
-			boolean allRevealed = true;
-			for (int r1 = 0; r1 < 5; r1++) {
-				for (int c1 = 0; c1 < 5; c1++) {
-					if (matrix[r1][c1] >= 0) {
-						allRevealed = false;
-						break;
-					}
-				}
-				if (!allRevealed) break;
-			}
-			if (allRevealed) {
-				new youWin();
+ 			
+ 			boolean allRevealed = true;
+ 			for (int r1 = 0; r1 < 5; r1++) {
+ 				for (int c1 = 0; c1 < 5; c1++) {
+ 					if (matrix[r1][c1] >= 0) {
+ 						allRevealed = false;
+ 						break;
+ 					}
+ 				}
+ 				if (!allRevealed) break;
+ 			}
+ 			if (allRevealed) {
+ 				new youWin();
                 reveal();
                 disable();
-				
-			}
+ 				
+ 			}
         }
     }
   }
