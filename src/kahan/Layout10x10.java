@@ -68,7 +68,7 @@ public class Layout10x10 extends JFrame implements ActionListener{
                 buttons[r][c].setOpaque(true);
                 buttons[r][c].setHorizontalAlignment(javax.swing.JButton.CENTER);
                 buttons[r][c].setVerticalAlignment(javax.swing.JButton.CENTER);
-                this.add(buttons[r][c]);
+                but.add(buttons[r][c]);
             }
         }
 
@@ -130,7 +130,6 @@ public class Layout10x10 extends JFrame implements ActionListener{
                int nr = r + dr;
                int nc = c + dc;
                if (nr >= 0 && nr < 10 && nc >= 0 && nc < 10 && matrix[nr][nc] != -1) {
-               	check[nr][nc] = true;
                	buttons[nr][nc].doClick();
                }
            }
