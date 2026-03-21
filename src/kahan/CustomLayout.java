@@ -1,5 +1,4 @@
 package kahan;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Random;
@@ -12,6 +11,11 @@ public class CustomLayout extends JFrame implements ActionListener{
     int rowSize;
     int colSize;
     String name;
+    boolean flagMode = false;
+    JPanel but;
+    JPanel header;
+    JButton flagbut;
+    Color originalColor;
     ImageIcon icon0 = scaleIcon(new ImageIcon("0.png"));
 	ImageIcon icon1 = scaleIcon(new ImageIcon("1.png"));
 	ImageIcon icon2 = scaleIcon(new ImageIcon("2.png"));
@@ -56,8 +60,26 @@ public class CustomLayout extends JFrame implements ActionListener{
 
         
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(700, 700);
-        this.setLayout(new GridLayout(rowSize, colSize, 5, 5));
+        this.setSize(700, 800);
+        this.setLayout(new BorderLayout());
+        
+        but = new JPanel();
+		but.setLayout(new GridLayout(rowSize, colSize, 5, 5));
+        but.setBackground(new Color(255, 255, 255));
+        this.add(but);
+
+        header = new JPanel();
+        header.setLayout(new BorderLayout());
+        header.setBackground(new Color(90, 90, 90));
+        header.setPreferredSize(new Dimension(100,100));
+        this.add(header, BorderLayout.NORTH);
+
+        flagbut = new JButton();
+        flagbut.setPreferredSize(new Dimension(80, 40));
+        flagbut.setBackground(new Color(255, 255, 0));
+        flagbut.setIcon(flag);
+        flagbut.addActionListener(this);
+        header.add(flagbut, BorderLayout.EAST);
 
         for (int r = 0; r < rowSize; r++) {
             for (int c = 0; c < colSize; c++) {
@@ -67,10 +89,10 @@ public class CustomLayout extends JFrame implements ActionListener{
                 buttons[r][c].setOpaque(true);
                 buttons[r][c].setHorizontalAlignment(javax.swing.JButton.CENTER);
                 buttons[r][c].setVerticalAlignment(javax.swing.JButton.CENTER);
-                this.add(buttons[r][c]);
+                but.add(buttons[r][c]);
             }
         }
-
+        originalColor = buttons[0][0].getBackground();
         Random rand = new Random();
         
         int minesToPlace = Integer.parseInt(minesStr);
@@ -136,17 +158,34 @@ public class CustomLayout extends JFrame implements ActionListener{
   	}
     @Override
     public void actionPerformed(ActionEvent e) {
+          if (e.getSource() == flagbut) {
+            if (flagMode) {
+                flagMode = false;
+                flagbut.setBackground(new Color(255, 255, 0));
+
+            }
+            else {
+                flagMode=true;
+                flagbut.setBackground(new Color(255, 0, 0));
+            }
+        }
         String cmd = e.getActionCommand();
         if (cmd != null && cmd.contains(",")) {
             String[] parts = cmd.split(",");
             int r = Integer.parseInt(parts[0]);
             int c = Integer.parseInt(parts[1]);
  			buttons[r][c].setBackground(new java.awt.Color(192, 192, 192));
- 			if (check[r][c]==false) {
+ 			if (flagMode && matrix[r][c] != -2) {
+                if (check[r][c]) {
+                    buttons[r][c].setIcon(null);
+                    buttons[r][c].setBackground(originalColor);
+                    check[r][c] = false;
+                } else{
  				buttons[r][c].setIcon(flag);
  				check[r][c]=true;
+                }
  			}
- 			else if (check[r][c]==true) {
+ 			else if (!flagMode) {
  			switch (matrix[r][c]) {
  				case 0: buttons[r][c].setIcon(icon0); 
  						if (matrix[r][c]!=-2) {

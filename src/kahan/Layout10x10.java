@@ -1,5 +1,8 @@
 package kahan;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -11,6 +14,10 @@ public class Layout10x10 extends JFrame implements ActionListener{
     JButton[][] buttons = new JButton[10][10];
     int matrix[][] = new int[10][10];
     boolean check[][] = new boolean[10][10];
+    boolean flagMode = false;
+    JPanel but;
+    JPanel header;
+    JButton flagbut;
 	ImageIcon icon0 = scaleIcon(new ImageIcon("0.png"));
 	ImageIcon icon1 = scaleIcon(new ImageIcon("1.png"));
 	ImageIcon icon2 = scaleIcon(new ImageIcon("2.png"));
@@ -33,9 +40,25 @@ public class Layout10x10 extends JFrame implements ActionListener{
     Layout10x10(){
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(700,700);
-        this.setLayout(new GridLayout(10,10,5,5));
+        this.setLayout(new BorderLayout());
 
-		
+        but = new JPanel();
+        but.setLayout(new GridLayout(10,10,5,5));
+        but.setBackground(new Color(255,255,255));
+        this.add(but, BorderLayout.CENTER);
+
+        header = new JPanel();
+        header.setLayout(new BorderLayout());
+        header.setBackground(new Color(90,90,90));
+        header.setPreferredSize(new Dimension(100,100));
+        this.add(header, BorderLayout.NORTH);
+
+        flagbut = new JButton();
+        flagbut.setPreferredSize(new Dimension(80,40));
+        flagbut.setBackground(new Color(255,255,0));
+        flagbut.setIcon(flag);
+        flagbut.addActionListener(this);
+        header.add(flagbut, BorderLayout.CENTER);
 
         for (int r = 0; r < 10; r++) {
             for (int c = 0; c < 10; c++) {
@@ -115,18 +138,32 @@ public class Layout10x10 extends JFrame implements ActionListener{
  	}
    @Override
    public void actionPerformed(ActionEvent e) {
+       if (e.getSource() == flagbut) {
+           flagMode = !flagMode;
+           flagbut.setBackground(flagMode ? new Color(255, 0, 0) : new Color(255, 255, 0));
+           return;
+       }
+
        String cmd = e.getActionCommand();
        if (cmd != null && cmd.contains(",")) {
            String[] parts = cmd.split(",");
            int r = Integer.parseInt(parts[0]);
            int c = Integer.parseInt(parts[1]);
 			buttons[r][c].setBackground(new java.awt.Color(192, 192, 192));
-			if (check[r][c]==false) {
-				buttons[r][c].setIcon(flag);
-				check[r][c]=true;
+			if (flagMode) {
+				if (check[r][c]) {
+					buttons[r][c].setIcon(null);
+					check[r][c] = false;
+				} else {
+					buttons[r][c].setIcon(flag);
+					check[r][c] = true;
+				}
+				return;
 			}
-			else if (check[r][c]==true) {
-			switch (matrix[r][c]) {
+
+			if (check[r][c]==false) {
+				check[r][c] = true; // mark as revealed
+				switch (matrix[r][c]) {
 				case 0: buttons[r][c].setIcon(icon0); 
 						if (matrix[r][c]!=-2) {
                             if (matrix[r][c] !=-2) {
