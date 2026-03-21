@@ -58,7 +58,7 @@ public class Layout10x10 extends JFrame implements ActionListener{
         flagbut.setBackground(new Color(255,255,0));
         flagbut.setIcon(flag);
         flagbut.addActionListener(this);
-        header.add(flagbut, BorderLayout.CENTER);
+        header.add(flagbut, BorderLayout.EAST);
 
         for (int r = 0; r < 10; r++) {
             for (int c = 0; c < 10; c++) {
