@@ -18,6 +18,11 @@ public class Layout10x10 extends JFrame implements ActionListener{
     JPanel but;
     JPanel header;
     JButton flagbut;
+    Color originalColor;
+    Timer timer;
+    JLabel timeLabel;
+    int seconds = 0;
+    private boolean isRevealing = false;
 	ImageIcon icon0 = scaleIcon(new ImageIcon("0.png"));
 	ImageIcon icon1 = scaleIcon(new ImageIcon("1.png"));
 	ImageIcon icon2 = scaleIcon(new ImageIcon("2.png"));
@@ -59,6 +64,24 @@ public class Layout10x10 extends JFrame implements ActionListener{
         flagbut.setIcon(flag);
         flagbut.addActionListener(this);
         header.add(flagbut, BorderLayout.EAST);
+
+        timeLabel = new JLabel("0s");
+        timeLabel.setPreferredSize(new Dimension(60,40));
+        timeLabel.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 24));
+        timeLabel.setBackground(Color.white);
+        timeLabel.setOpaque(true);
+        timeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        timeLabel.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
+        timeLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+        header.add(timeLabel, BorderLayout.WEST);
+        timer = new Timer(1000, e -> {
+            seconds++;
+            timeLabel.setText(seconds + "s");
+            if (seconds >= 100) {
+                timeLabel.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 18));
+            }
+        });
+        timer.start();
 
         for (int r = 0; r < 10; r++) {
             for (int c = 0; c < 10; c++) {
@@ -167,7 +190,15 @@ public class Layout10x10 extends JFrame implements ActionListener{
 						if (matrix[r][c]!=-2) {
                             if (matrix[r][c] !=-2) {
                                 matrix[r][c] = -2;
- 							    open(r,c); 
+                                if (!isRevealing) {
+                                    isRevealing = true;
+                                    timer.stop();
+                                }
+ 							    open(r,c);
+                                if (isRevealing) {
+                                    isRevealing = false;
+                                    timer.start();
+                                }
  						}
                     }
  						break;
@@ -182,6 +213,7 @@ public class Layout10x10 extends JFrame implements ActionListener{
 			
 			}
 	           if (matrix[r][c] == -1) {
+                    timer.stop();
 	               new youLose();
 	               reveal();
 	               disable();
@@ -200,6 +232,7 @@ public class Layout10x10 extends JFrame implements ActionListener{
 				if (!allRevealed) break;
 			}
 			if (allRevealed) {
+                timer.stop();
 				new youWin();
                reveal();
                disable();
