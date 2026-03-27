@@ -1,0 +1,47 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class NativeCsvExample {
+    public static void main(String[] args) {
+        String fileName = "data.csv";
+
+        // 1. WRITING to a CSV file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            // Write Header
+            writer.write("ID,Name,City");
+            writer.newLine(); // Explicitly add a new line
+
+            // Write Data Rows
+            writer.write("1,Alice,New York");
+            writer.newLine();
+            writer.write("2,Bob,Los Angeles");
+            writer.newLine();
+            
+            System.out.println("File written successfully: " + fileName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // 2. READING from the same CSV file
+        System.out.println("\nReading content from file:");
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            // Read until the end of the file
+            while ((line = reader.readLine()) != null) {
+                // Split the string into tokens using the comma delimiter
+                String[] cells = line.split(",");
+                
+                // Print formatted data
+                for (int i = 0; i < cells.length; i++) {
+                    System.out.print(cells[i] + (i < cells.length - 1 ? " | " : ""));
+                }
+                System.out.println();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
