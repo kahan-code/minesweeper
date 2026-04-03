@@ -18,10 +18,10 @@ public class Layout10x10 extends JFrame implements ActionListener{
     JPanel but;
     JPanel header;
     JButton flagbut;
-    Color originalColor;
     Timer timer;
     JLabel timeLabel;
     int seconds = 0;
+    String name;
     private boolean isRevealing = false;
 	ImageIcon icon0 = scaleIcon(new ImageIcon("0.png"));
 	ImageIcon icon1 = scaleIcon(new ImageIcon("1.png"));
@@ -43,6 +43,9 @@ public class Layout10x10 extends JFrame implements ActionListener{
 		return icon;
 	}
     Layout10x10(){
+    	
+    	name = JOptionPane.showInputDialog(null, "Enter your name", "");
+    	
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(700,700);
         this.setLayout(new BorderLayout());
@@ -123,6 +126,7 @@ public class Layout10x10 extends JFrame implements ActionListener{
         this.setVisible(true);
 
     }
+    @Override
     public void disable() {
   	  for (int r=0;r<10;r++) {
   		  for (int c=0;c<10;c++) {
@@ -160,6 +164,7 @@ public class Layout10x10 extends JFrame implements ActionListener{
  	}
    @Override
    public void actionPerformed(ActionEvent e) {
+	   Scoreboard sc = new Scoreboard();
        if (e.getSource() == flagbut) {
            flagMode = !flagMode;
            flagbut.setBackground(flagMode ? new Color(255, 0, 0) : new Color(255, 255, 0));
@@ -215,6 +220,7 @@ public class Layout10x10 extends JFrame implements ActionListener{
 	           if (matrix[r][c] == -1) {
                     timer.stop();
 	               new youLose();
+	               sc.csv(false, name, seconds, 10,10,10);
 	               reveal();
 	               disable();
 			}
@@ -234,9 +240,10 @@ public class Layout10x10 extends JFrame implements ActionListener{
 			if (allRevealed) {
                 timer.stop();
 				new youWin();
+				sc.csv(true, name, seconds, 10, 10, 10);
                reveal();
                disable();
-				
+			
 			}
        }
    }
