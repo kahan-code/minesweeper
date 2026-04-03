@@ -22,6 +22,7 @@ public class Layout5x5 extends JFrame implements ActionListener{
     Timer timer;
     JLabel timeLabel;
     int seconds = 0;
+    String name;
     private boolean isRevealing = false;
 	ImageIcon icon0 = scaleIcon(new ImageIcon("0.png"));
 	ImageIcon icon1 = scaleIcon(new ImageIcon("1.png"));
@@ -43,6 +44,9 @@ public class Layout5x5 extends JFrame implements ActionListener{
 		return icon;
 	}
     Layout5x5(){
+    	
+    	name = JOptionPane.showInputDialog(null, "Enter your name", "");
+    	
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(700,800);
         this.setLayout(new BorderLayout());
@@ -162,6 +166,7 @@ public class Layout5x5 extends JFrame implements ActionListener{
   	}
     @Override
     public void actionPerformed(ActionEvent e) {
+    	Scoreboard sc = new Scoreboard();
         if (e.getSource() == flagbut) {
             if (flagMode) {
                 flagMode = false;
@@ -219,6 +224,7 @@ public class Layout5x5 extends JFrame implements ActionListener{
  			  if (matrix[r][c] == -1) {
                     timer.stop();
  	                new youLose();
+ 	               sc.csv(false, name, seconds, 4,5,5);
  	                reveal();
  	                disable();
  			}
@@ -237,8 +243,10 @@ public class Layout5x5 extends JFrame implements ActionListener{
  			if (allRevealed) {
                 timer.stop();
  				new youWin();
+ 				sc.csv(true, name, seconds, 4, 5, 5);
                 reveal();
                 disable();
+                
  				
  			}
         }

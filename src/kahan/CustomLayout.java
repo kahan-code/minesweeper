@@ -10,7 +10,7 @@ public class CustomLayout extends JFrame implements ActionListener{
     boolean check[][];
     int rowSize;
     int colSize;
-    String name;
+    String name,rows,colums,minesStr;
     boolean flagMode = false;
     JPanel but;
     JPanel header;
@@ -42,9 +42,9 @@ public class CustomLayout extends JFrame implements ActionListener{
 
     CustomLayout() {
     	name = JOptionPane.showInputDialog(null, "Enter your name", "");
-        String rows = JOptionPane.showInputDialog(null, "Enter number of rows", "5");
-        String colums = JOptionPane.showInputDialog(null, "Enter number of columns", "5");
-        String minesStr = JOptionPane.showInputDialog(null, "Enter number of mines", "5");
+    	rows = JOptionPane.showInputDialog(null, "Enter number of rows", "5");
+        colums = JOptionPane.showInputDialog(null, "Enter number of columns", "5");
+        minesStr = JOptionPane.showInputDialog(null, "Enter number of mines", "5");
         
         if (rows == null& colums == null) {
             return;
@@ -180,6 +180,7 @@ public class CustomLayout extends JFrame implements ActionListener{
   	}
     @Override
     public void actionPerformed(ActionEvent e) {
+    	Scoreboard sc = new Scoreboard();
           if (e.getSource() == flagbut) {
             if (flagMode) {
                 flagMode = false;
@@ -237,6 +238,7 @@ public class CustomLayout extends JFrame implements ActionListener{
  			  if (matrix[r][c] == -1) {
                     timer.stop();
  	                new youLose();
+ 	               sc.csv(false, name, seconds, Integer.parseInt(minesStr), Integer.parseInt(rows), Integer.parseInt(colums));
  	                reveal();
  	                disable();
  			}
@@ -255,6 +257,7 @@ public class CustomLayout extends JFrame implements ActionListener{
  			if (allRevealed) {
                 timer.stop();
  				new youWin();
+ 				sc.csv(true, name, seconds, Integer.parseInt(minesStr), Integer.parseInt(rows), Integer.parseInt(colums));
                 reveal();
                 disable();
  				
