@@ -18,6 +18,7 @@ public class Layout10x10 extends JFrame implements ActionListener{
     JPanel but;
     JPanel header;
     JButton flagbut;
+    Color originalColor;
     Timer timer;
     JLabel timeLabel;
     int seconds = 0;
@@ -97,6 +98,7 @@ public class Layout10x10 extends JFrame implements ActionListener{
                 but.add(buttons[r][c]);
             }
         }
+        originalColor = buttons[0][0].getBackground();
 
         Random rand = new Random();
         
@@ -180,6 +182,7 @@ public class Layout10x10 extends JFrame implements ActionListener{
 			if (flagMode) {
 				if (check[r][c]) {
 					buttons[r][c].setIcon(null);
+                    buttons[r][c].setBackground(originalColor);
 					check[r][c] = false;
 				} else {
 					buttons[r][c].setIcon(flag);
